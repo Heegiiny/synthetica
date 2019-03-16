@@ -83,8 +83,8 @@ class Login extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-6 m-auto">
-                            <h1 className="display-4 text-center">Fuel App</h1>
-                            {subTitle}
+                            <h1 className="display-4 text-center">Synthetica</h1>
+                            {/*subTitle*/}
                             <Form onSubmit={this.handleSubmit}>
                                 <FormGroup>
                                     <Label for={this.titleInputId}>
@@ -104,7 +104,7 @@ class Login extends Component {
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for={this.titleInputId}>
-                                        Пароль
+                                        Password
                                     </Label>
                                     <Input
                                         type="password"
@@ -120,7 +120,7 @@ class Login extends Component {
                                 </FormGroup>
                                 <div className="text-center">
                                     <Button type="submit" color="primary">
-                                        Войти
+                                        Sign In
                                     </Button>
                                 </div>
                             </Form>

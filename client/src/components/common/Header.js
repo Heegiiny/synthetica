@@ -81,7 +81,7 @@ function Header() {
             >
                 <div className="container-fluid">
                     <Link to="/" className="navbar-brand">
-                        Fuel App
+                        Synthetica
                     </Link>
                     <CenterNav />
                     <RightNav />
