@@ -1,0 +1,25 @@
+.gallery-blocks-form {
+    @include border-block();
+
+    .controls {
+        border-bottom: $border-std;
+        margin: 0 -5px;
+        padding: 5px;
+        .btn {
+            margin-right: 3px;
+            i {
+                margin: 0;
+            }
+        }
+        input[type="file"] {
+            display: none;
+        }
+    }
+}
+
+.gallery-post-form-block {
+    p {
+        margin: 0;
+        padding: 10px;
+    }
+}

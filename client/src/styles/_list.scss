@@ -1,0 +1,48 @@
+.list-page {
+    .list-item {
+        padding-bottom: 15px;
+    }
+
+    .list-item-box {
+        @include shadow-block(4px);
+    }
+}
+
+.short-list {
+    @include shadow-block(15px);
+    .flex-column > .list-item {
+        max-width: 100%;
+    }
+}
+
+.short-list-title {
+    font-size: 22px;
+    padding: 2px -3px;
+    margin-bottom: 10px;
+    font-weight: 300;
+}
+
+.list-item {
+    a {
+        display: block;
+        height: 100%;
+        color: #23398e;
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
+
+.list-item-photo {
+    height: 180px;
+    overflow: hidden;
+    img {
+        width: 100%;
+        max-height: 100%;
+    }
+}
+
+.list-item-caption {
+    font-size: 18px;
+    padding: 2px 5px;
+}

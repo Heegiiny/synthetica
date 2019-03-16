@@ -1,0 +1,145 @@
+body {
+    background-color: #f5f9fc;
+    color: #495057;
+}
+
+img {
+    max-width: 100%;
+}
+
+*:focus {
+    outline: none;
+}
+
+$border-std: 1px solid #e5e9f2;
+$shadow-std: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
+
+@mixin border-block($padding: 5px) {
+    border: $border-std;
+    background: #fff;
+    padding: $padding;
+    border-radius: 4px;
+}
+
+@mixin shadow-block($padding: 5px) {
+    @include border-block($padding);
+    box-shadow: $shadow-std;
+}
+
+.border-block {
+    @include border-block();
+}
+
+.shadow-block {
+    @include shadow-block();
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-bottom: 0.5rem;
+    font-family: inherit;
+    font-weight: 400;
+    line-height: 1.2;
+    color: #000;
+}
+
+.h1,
+h1 {
+    font-size: 1.75rem;
+}
+
+.h2,
+h2 {
+    font-size: 1.53125rem;
+}
+
+.h3,
+h3 {
+    font-size: 1.3125rem;
+}
+
+.h4,
+h4 {
+    font-size: 1.09375rem;
+}
+
+.h5,
+.h6,
+h5,
+h6 {
+    font-size: 0.875rem;
+}
+
+.card {
+    border: $border-std;
+}
+
+.nav-tabs {
+    padding: 0 1em;
+}
+
+.nav-tabs-card {
+    border-bottom: none;
+    .active {
+        position: relative;
+        z-index: 5;
+    }
+}
+
+.nav-link {
+    cursor: pointer;
+    user-select: none;
+}
+
+.header-navbar {
+    border-bottom: $border-std;
+    box-shadow: $shadow-std;
+}
+
+.border-bottom {
+    border-bottom: $border-std;
+}
+
+.content {
+    margin-top: 1em;
+}
+
+.gray-border-right {
+    border-right: $gray-300 1px solid;
+}
+
+.login {
+    margin-top: 15%;
+}
+
+.alert p {
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.pagination {
+    margin-top: 1rem;
+    justify-content: center;
+}
+
+.nav-tabs,
+.btn {
+    i {
+        margin-right: 0.5rem;
+    }
+}
+
+.contract-active-check-group {
+    margin-top: 2.3em;
+}
