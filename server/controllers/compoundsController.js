@@ -2,16 +2,32 @@ const Compound = require("../models/compound");
 const CompoundPost = require("../models/posts/compoundPost");
 const modelRoutes = require("./routerHelpers/modelRoutes");
 const subDocRoutes = require("./routerHelpers/subDocRoutes");
+const paginatedList = require("./routerHelpers/paginatedList");
 
-// Создаем пути через modelRoutes
-const router = modelRoutes(Compound).getRouter();
+// create router with modelRoutes()
+const ModelRoutes = modelRoutes(Compound);
+
+// customize select in paginatedList()
+ModelRoutes.getDocList = (req, res, next) => {
+    paginatedList(Compound, req.query, res, next, "id title formula");
+};
+
+const router = ModelRoutes.getRouter();
 
 // Gallery paths
 router.get("/:id(\\d+)/gallery", function(req, res, next) {
     req.activeDoc
-        .populate("posts")
+        .populate("gallery")
         .execPopulate()
         .then(doc => res.json(doc))
+        .catch(err => next(err));
+});
+
+router.get("/:id(\\d+)/gallery/:gallery_id(\\d+)", function(req, res, next) {
+    req.activeDoc
+        .populate({ path: "gallery", match: { id: req.params.gallery_id } })
+        .execPopulate()
+        .then(doc => res.json(doc.gallery[0]))
         .catch(err => next(err));
 });
 

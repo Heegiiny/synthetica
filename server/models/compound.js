@@ -8,7 +8,11 @@ const Synthesis = require("./synthesis");
 const modelName = "Compound";
 const schema = new Schema(
     {
-        text: String
+        text: String,
+        formula: {
+            isImage: { type: Boolean, required: true, default: false },
+            text: { type: String /*required: true*/ }
+        }
     },
     {
         toJSON: { virtuals: true }
@@ -20,7 +24,7 @@ schema.plugin(pageSchemaPlugin, modelName);
 // Добавляем историю изменений
 //schema.plugin(mongooseHistory, modelName);
 
-schema.virtual("posts", {
+schema.virtual("gallery", {
     ref: "CompoundPost",
     localField: "_id",
     foreignField: "compound"
@@ -46,9 +50,9 @@ schema.virtual("syntheses", {
 
 schema.virtual("photo").get(function() {
     // Get the block with isPreview==true
-    const previewPosts = this.posts.filter(post => post.isPreview);
+    const previewPosts = this.gallery.filter(post => post.isPreview);
 
-    const post = previewPosts.length > 0 ? previewPosts[0] : this.posts[0];
+    const post = previewPosts.length > 0 ? previewPosts[0] : this.gallery[0];
 
     if (!post) {
         return null;
@@ -62,7 +66,7 @@ schema.virtual("preview").get(function() {
 });
 
 const autoPopulate = function() {
-    this.populate({ path: "posts", options: { limit: 5 } })
+    this.populate({ path: "gallery", options: { limit: 5 } })
         .populate({
             path: "relatedPosts",
             options: { limit: 5 }
@@ -78,7 +82,7 @@ const autoPopulate = function() {
 };
 
 schema.pre("find", function() {
-    this.populate("posts");
+    this.populate("gallery");
 });
 schema.pre("findOne", autoPopulate);
 

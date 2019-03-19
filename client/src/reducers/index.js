@@ -10,6 +10,7 @@ export default combineReducers({
     listPage: createListReducer("LIST_PAGE"),
     dashboardCompounds: createListReducer("DASHBOARD_COMPOUNDS"),
     dashboardSyntheses: createListReducer("DASHBOARD_SYNTHESES"),
+    galleryList: createListReducer("GALLERY_LIST"),
     modelPage: createModelReducer("MODEL_PAGE"),
     galleryPost: createModelReducer("GALLERY_POST")
 });

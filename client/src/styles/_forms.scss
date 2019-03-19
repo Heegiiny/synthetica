@@ -23,3 +23,23 @@
         padding: 10px;
     }
 }
+
+.formula-field {
+    @include border-block(0);
+    .form-check-label {
+        padding-left: 1rem;
+    }
+    .form-check-input {
+        margin-top: 0.4rem;
+    }
+    .form-control {
+        border: none;
+    }
+}
+
+.formula-field-radio-row {
+    display: flex;
+    align-items: center;
+    height: calc(1.5em + 0.75rem + 2px);
+    border-bottom: $border-std;
+}

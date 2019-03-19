@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 import ListItem from "./ListItem";
+import CompoundListItem from "../compounds/CompoundListItem";
 
 class ListPage extends Component {
     renderListItem = item => {
-        const link = `/${this.props.path}/${item.id}`;
+        const { path } = this.props;
+        const link = `/${path}/${item.id}`;
+
+        if (path === "compounds") {
+            return <CompoundListItem link={link} model={item} key={item._id} />;
+        }
 
         return (
             <ListItem

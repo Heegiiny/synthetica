@@ -8,10 +8,15 @@ import {
     Input,
     FormText,
     FormFeedback,
-    Badge
+    Badge,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter
 } from "reactstrap";
 import FormInput from "../forms/FormInput";
 import uploadMedia from "../../actions/uploadMedia";
+import idGenerator from "react-id-generator";
 
 const ENTER_KEY_CODE = 13;
 const BACKSPACE_KEY_CODE = 8;
@@ -28,14 +33,28 @@ class GalleryPostForm extends Component {
             this.props.updateStateModel("blocks.0", {});
         }
 
+        this.state = {
+            addVideoModalOpen: false,
+            videoInputText: ""
+        };
+
         this.imageUploadRef = createRef();
 
         this.editableBlocksRefs = [];
         this.editableBlockToFocus = null;
-        this.focusedEditableBlock = null;
+        this.focusedEditableBlock = 0;
     }
 
-    addVideo = () => {};
+    //https://www.youtube.com/watch?v=7TRuXwI1ir8
+    addVideo = () => {
+        const { blocks } = this.props.model;
+
+        blocks[this.focusedEditableBlock].video = this.state.videoInputText;
+
+        this.props.updateStateModel("blocks", blocks);
+
+        this.setState({ addVideoModalOpen: false, videoInputText: "" });
+    };
 
     addNewBlock = (block = {}) => {
         const { blocks } = this.props.model;
@@ -88,9 +107,51 @@ class GalleryPostForm extends Component {
         event.target.value = "";
     };
 
+    renderVideoModal = () => {
+        const toggle = () => this.setState({ addVideoModalOpen: false });
+        const inputId = idGenerator("videoInputText");
+
+        return (
+            <Modal isOpen={this.state.addVideoModalOpen} toggle={toggle}>
+                <Form onSubmit={() => this.addVideo()}>
+                    <ModalHeader tag="h3" toggle={toggle}>
+                        Add video to post
+                    </ModalHeader>
+                    <ModalBody>
+                        <FormGroup>
+                            <Label for={inputId}>Link to youtube</Label>
+                            <Input
+                                type="text"
+                                id={inputId}
+                                onChange={e =>
+                                    this.setState({
+                                        videoInputText: e.target.value
+                                    })
+                                }
+                                value={this.state.videoInputText}
+                            />
+                        </FormGroup>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="secondary" onClick={toggle}>
+                            Cancel
+                        </Button>
+                        <Button type="submit" color="primary">
+                            Add video
+                        </Button>
+                    </ModalFooter>
+                </Form>
+            </Modal>
+        );
+    };
+
     renderBlocksControls = () => {
         const videoBtn = (
-            <Button color="link" outline onClick={this.addVideo}>
+            <Button
+                color="link"
+                outline
+                onClick={() => this.setState({ addVideoModalOpen: true })}
+            >
                 <i className="fa fa-video" />
             </Button>
         );
@@ -115,6 +176,7 @@ class GalleryPostForm extends Component {
             <>
                 {videoBtn}
                 {imageBtn}
+                {this.renderVideoModal()}
             </>
         );
     };
@@ -184,7 +246,7 @@ class GalleryPostForm extends Component {
         }
         const headerText = !this.isNew
             ? "Edit: " + this.props.model.title
-            : "New compound";
+            : "New gallery post";
 
         return <h1>{headerText}</h1>;
     };

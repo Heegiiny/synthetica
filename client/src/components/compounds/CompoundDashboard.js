@@ -9,17 +9,17 @@ function CompoundDashboard({ model }) {
     const { title, text, posts } = model;
 
     return (
-        <>
-            <div className="col-lg-4">
+        <div className="row">
+            <div className="col-lg-6">
                 <div className="compound-description">{text}</div>
                 <CompoundTags />
                 <CompoundProperties />
                 <CompoundDiscussion />
             </div>
-            <div className="col-lg-4">
+            <div className="col-lg-6">
                 <CompoundRelated model={model} />
             </div>
-        </>
+        </div>
     );
 }
 

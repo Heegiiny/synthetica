@@ -4,3 +4,14 @@
 .gallery-title {
     font-weight: 300;
 }
+
+.gallery-post-video {
+    //width: 100%;
+    //height: calc((9 / 16) * 100%);
+    //max-height: calc(100vh - 169px);
+    //min-height: 480px;
+    & > div {
+        width: 100% !important;
+        height: calc((9 / 16) * 1110px) !important;
+    }
+}

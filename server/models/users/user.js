@@ -19,9 +19,9 @@ const schema = new Schema(
         email: { type: String, unique: true, required: true },
         avatar: { type: String },
         socials: {
-            youtube: String,
-            twitter: String,
-            facebook: String
+            youtube: { type: String },
+            twitter: { type: String },
+            facebook: { type: String }
         }
     },
     { toJSON: { virtuals: true }, discriminatorKey: "group" }

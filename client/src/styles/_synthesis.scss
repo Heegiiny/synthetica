@@ -1,0 +1,21 @@
+.synthesis-page {
+    & > .container {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.synthesis-page-with-gallery {
+    .title-row {
+        order: -200;
+    }
+    .gallery-post-page {
+        order: -150;
+    }
+    .synthesis-gallery-metadata {
+        order: -140;
+    }
+    .synthesis-photo {
+        order: -100;
+    }
+}

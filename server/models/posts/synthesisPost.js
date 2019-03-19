@@ -39,7 +39,7 @@ schema.virtual("preview").get(function() {
         if (!thumbnail) {
             return null;
         }
-        return thumbnail.default.url;
+        return thumbnail.medium.url;
     }
 
     function getImagePreview(image) {
@@ -76,7 +76,7 @@ schema.virtual("isGallery").get(function() {
 });
 
 // Добавляем поля для страницы сайта
-//schema.plugin(pageSchemaPlugin, modelName);
+schema.plugin(pageSchemaPlugin, modelName);
 // Добавляем историю изменений
 //schema.plugin(mongooseHistory, modelName);
 

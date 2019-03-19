@@ -3,9 +3,15 @@ import { Button } from "reactstrap";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
 import CompoundDashboard from "./CompoundDashboard";
+
 import ShortGallery from "../gallery/ShortGallery";
 import GalleryPage from "../gallery/GalleryPage";
 import GalleryPostForm from "../gallery/GalleryPostForm";
+import GalleryPostPage from "../gallery/GalleryPostPage";
+
+import connectForm from "../connect/connectForm";
+import connectPage from "../connect/connectPage";
+import connectList from "../connect/connectList";
 
 class CompoundPage extends Component {
     renderControls = () => {
@@ -50,7 +56,7 @@ class CompoundPage extends Component {
     }
 
     render() {
-        const { title, posts } = this.props.model;
+        const { title, gallery } = this.props.model;
         const routerBasename = this.props.match.url;
 
         const nestedRouterLocation = {
@@ -71,23 +77,41 @@ class CompoundPage extends Component {
                     <div className="row">
                         <div className="col-lg-4">
                             <div className="compound-photo">compound-photo</div>
-                            <ShortGallery items={posts} />
+                            <ShortGallery items={gallery} />
                         </div>
-                        <Switch location={nestedRouterLocation}>
-                            <Route
-                                path="/gallery/new"
-                                component={GalleryPostForm}
-                            />
-                            <Route path="/gallery" component={GalleryPage} />
-                            <Route
-                                path="/"
-                                render={() => (
-                                    <CompoundDashboard
-                                        model={this.props.model}
-                                    />
-                                )}
-                            />
-                        </Switch>
+                        <div className="col-lg-8">
+                            <Switch>
+                                <Route
+                                    path={`${routerBasename}/gallery/new`}
+                                    component={connectForm(
+                                        GalleryPostForm,
+                                        "galleryPost"
+                                    )}
+                                />
+                                <Route
+                                    path={`${routerBasename}/gallery/:id`}
+                                    component={connectPage(
+                                        GalleryPostPage,
+                                        "galleryPost"
+                                    )}
+                                />
+                                <Route
+                                    path={`${routerBasename}/gallery`}
+                                    component={connectList(
+                                        GalleryPage,
+                                        "galleryList"
+                                    )}
+                                />
+                                <Route
+                                    path={`${routerBasename}/`}
+                                    render={() => (
+                                        <CompoundDashboard
+                                            model={this.props.model}
+                                        />
+                                    )}
+                                />
+                            </Switch>
+                        </div>
                     </div>
                 </div>
             </div>

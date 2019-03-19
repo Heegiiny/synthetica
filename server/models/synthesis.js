@@ -42,7 +42,7 @@ schema.plugin(pageSchemaPlugin, modelName);
 // Добавляем историю изменений
 //schema.plugin(mongooseHistory, modelName);
 
-schema.virtual("posts", {
+schema.virtual("gallery", {
     ref: "SynthesisPost",
     localField: "_id",
     foreignField: "synthesis"
@@ -50,9 +50,9 @@ schema.virtual("posts", {
 
 schema.virtual("photo").get(function() {
     // Get the block with isPreview==true
-    const previewPosts = this.posts.filter(post => post.isPreview);
+    const previewPosts = this.gallery.filter(post => post.isPreview);
 
-    const post = previewPosts.length > 0 ? previewPosts[0] : this.posts[0];
+    const post = previewPosts.length > 0 ? previewPosts[0] : this.gallery[0];
 
     if (!post) {
         return null;
@@ -66,13 +66,13 @@ schema.virtual("preview").get(function() {
 });
 
 const autoPopulate = function() {
-    this.populate({ path: "posts", options: { limit: 5 } })
+    this.populate({ path: "gallery", options: { limit: 5 } })
         .populate("reagents.compound")
         .populate("products.compound");
 };
 
 schema.pre("find", function() {
-    this.populate("posts");
+    this.populate("gallery");
 });
 schema.pre("findOne", autoPopulate);
 

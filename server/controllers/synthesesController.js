@@ -29,19 +29,34 @@ this.updateDoc = (req, res, next) => {
 
 const router = ModelRoutes.getRouter();
 
-// Добавляем пути для постов
-router.get("/:id(\\d+)/posts", function(req, res, next) {
+// Gallery paths
+router.get("/:id(\\d+)/gallery", function(req, res, next) {
     req.activeDoc
-        .populate("posts")
+        .populate("gallery")
         .execPopulate()
         .then(doc => res.json(doc))
         .catch(err => next(err));
 });
 
-router.post("/:id(\\d+)/posts", function(req, res, next) {
+router.get("/:id(\\d+)/gallery/:gallery_id(\\d+)", function(req, res, next) {
+    req.activeDoc
+        .populate({ path: "gallery", match: { id: req.params.gallery_id } })
+        .execPopulate()
+        .then(doc => res.json(doc.gallery[0]))
+        .catch(err => next(err));
+});
+
+router.post("/:id(\\d+)/gallery", function(req, res, next) {
+    const blocks = req.body.blocks;
+    if (!blocks) {
+        res.status(400).json({
+            errors: "Empty post"
+        });
+    }
+
     SynthesisPost.create({
-        synthesis: req.activeDoc._id,
-        video: req.body.video
+        ...req.body,
+        synthesis: req.activeDoc._id
     })
         .then(post => res.json(post))
         .catch(err => next(err));

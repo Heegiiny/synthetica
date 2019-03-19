@@ -1,16 +1,14 @@
 import React, { Fragment } from "react";
 
 import SynthesisDiscussion from "./SynthesisDiscussion";
+import ShortGallery from "../gallery/ShortGallery";
+import SynthesisCompounds from "./related/SynthesisCompounds";
 
 function SynthesisDashboard({ model }) {
-    const { title, posts } = model;
-
     return (
         <>
-            <div className="col-lg-4">
-                <SynthesisDiscussion />
-            </div>
-            <div className="col-lg-4" />
+            <SynthesisCompounds model={model} />
+            <ShortGallery items={model.gallery} />
         </>
     );
 }

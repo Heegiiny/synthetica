@@ -24,7 +24,7 @@ CreateBtn = withRouter(CreateBtn);
 function ShortGallery({ items, match }) {
     const renderItem = item => (
         <div className="col" key={item._id}>
-            <Link to="/">
+            <Link to={`${match.url}/gallery/${item.id}`}>
                 <img src={item.preview} alt={item.title} />
             </Link>
         </div>

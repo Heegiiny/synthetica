@@ -43,7 +43,7 @@ class RelatedField extends Component {
 
         return (
             <div className="related-field">
-                <ShortList vertical title={label} items={items} />
+                <ShortList vertical path={path} title={label} items={items} />
 
                 <SuggestionsField
                     label={label}

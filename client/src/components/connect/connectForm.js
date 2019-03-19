@@ -16,6 +16,8 @@ import {
 
 import FormContainer from "../forms/FormContainer";
 import handleChangeHelper from "../../helpers/handleChangeHelper";
+import pathHelper from "../../helpers/pathHelper";
+
 import createModelActions from "../../actions/generators/createModelActions";
 import * as suggestionsActions from "../../actions/suggestionsActions";
 
@@ -34,7 +36,7 @@ export default (WrappedComponent, stateContainer = "modelPage") => {
             super(props);
 
             // Выбираем путь из роутера
-            this.path = props.match.path.split("/")[1];
+            this.path = pathHelper(props.match.url);
 
             // Выбираем id активного документа из роутера
             this.activeId = parseInt(props.match.params.id);
@@ -57,7 +59,7 @@ export default (WrappedComponent, stateContainer = "modelPage") => {
             this.props.savePage(this.state.model, this.props.history);
         }
 
-        componentWillMount() {
+        componentDidMount() {
             this.props.updatePage();
         }
 

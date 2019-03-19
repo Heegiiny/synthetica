@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { withRouter } from "react-router";
 import InfiniteScroll from "react-infinite-scroller";
+import pathHelper from "../../helpers/pathHelper";
 
 import createListActions from "../../actions/generators/createListActions";
 
@@ -23,9 +24,7 @@ export default (
             super(props);
 
             // Get active path either from props or router
-            this.path = props.path
-                ? props.path
-                : props.match.path.split("/")[1];
+            this.path = props.path ? props.path : pathHelper(props.match.path);
 
             this.props.resetList();
 

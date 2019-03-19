@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { withRouter } from "react-router";
+import pathHelper from "../../helpers/pathHelper";
 
 import createModelActions from "../../actions/generators/createModelActions";
 
@@ -15,7 +16,7 @@ export default (WrappedComponent, stateContainer = "modelPage") => {
             super(props);
 
             // Выбираем путь из роутера
-            this.path = props.match.path.split("/")[1];
+            this.path = pathHelper(props.match.path);
 
             // Выбираем id активного документа из роутера
             this.activeId = parseInt(props.match.params.id);

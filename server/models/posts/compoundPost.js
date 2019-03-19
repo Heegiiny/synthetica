@@ -6,6 +6,7 @@ const ObjectId = Schema.Types.ObjectId;
 const pageSchemaPlugin = require("../plugins/pageSchemaPlugin");
 const User = require("../users/user");
 const Compound = require("../compound");
+const Synthesis = require("../synthesis");
 
 const postBlockSchema = new Schema({
     video: String,
@@ -77,7 +78,7 @@ schema.virtual("isGallery").get(function() {
 });
 
 // Добавляем поля для страницы сайта
-//schema.plugin(pageSchemaPlugin, modelName);
+schema.plugin(pageSchemaPlugin, modelName);
 // Добавляем историю изменений
 //schema.plugin(mongooseHistory, modelName);
 
