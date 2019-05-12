@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { matchPath } from "react-router";
 import classNames from "classnames";
 
-import SynthesisDashboard from "./SynthesisDashboard";
 import GalleryPage from "../gallery/GalleryPage";
 import GalleryPostForm from "../gallery/GalleryPostForm";
 import GalleryPostPage from "../gallery/GalleryPostPage";
@@ -12,6 +11,9 @@ import GalleryPostPage from "../gallery/GalleryPostPage";
 import connectForm from "../connect/connectForm";
 import connectPage from "../connect/connectPage";
 import connectList from "../connect/connectList";
+import SynthesisCompounds from "./related/SynthesisCompounds";
+import ShortList from "../list/ShortList";
+import PageHeadline from "../common/PageHeadline";
 
 class SynthesisPage extends Component {
     constructor(props) {
@@ -21,8 +23,10 @@ class SynthesisPage extends Component {
             currentSubPath: "",
             routerBasename: ""
         };
+    }
 
-        this.updateRouterState(props);
+    componentDidMount() {
+        this.updateRouterState(this.props);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -38,7 +42,7 @@ class SynthesisPage extends Component {
             currentSubPath = "main";
         }
 
-        const isGalleryPage = matchPath(this.props.location.pathname, {
+        const isGalleryPage = matchPath(props.location.pathname, {
             path: `${routerBasename}/gallery/:id`
         });
         if (isGalleryPage) {
@@ -57,82 +61,6 @@ class SynthesisPage extends Component {
                 this.state.currentSubPath === "gallery"
         });
 
-    renderControls = () => {
-        /*if (!this.props.match.isExact) {
-            return null;
-        }*/
-
-        const editBtn = (
-            <Link to={this.props.match.url + "/edit"}>
-                <Button size="sm" outline color="secondary" className="ml-2">
-                    <i className="fa fa-edit" />
-                    Edit
-                </Button>
-            </Link>
-        );
-
-        const removeBtn = (
-            <Button size="sm" outline color="danger" className="ml-2">
-                <i className="fa fa-trash-alt" />
-                Delete
-            </Button>
-        );
-
-        return (
-            <>
-                {editBtn}
-                {removeBtn}
-            </>
-        );
-    };
-
-    renderTitleBar = () => {
-        const { currentSubPath, routerBasename } = this.state;
-        const { model } = this.props;
-
-        let titleWidth = 12;
-        let backBtn = null;
-        let controls = null;
-        let title = null;
-
-        if (currentSubPath === "main") {
-            controls = (
-                <div className="col-lg-4 text-right">
-                    {this.renderControls()}
-                </div>
-            );
-            titleWidth -= 4;
-        }
-
-        if (currentSubPath === "gallery") {
-            backBtn = (
-                <div className="col-lg-2 pr-0">
-                    <Link to={routerBasename}>
-                        <Button outline color="info">
-                            <i className="fa fa-chevron-left mr-2" /> Back to
-                            synthesis
-                        </Button>
-                    </Link>
-                </div>
-            );
-            titleWidth -= 2;
-        }
-
-        const title = (
-            <div className={`col-lg-${titleWidth}`}>
-                <h1>{model.title}</h1>
-            </div>
-        );
-
-        return (
-            <div className="row title-row">
-                {backBtn}
-                {title}
-                {controls}
-            </div>
-        );
-    };
-
     render() {
         const { model } = this.props;
         const { routerBasename } = this.state;
@@ -140,7 +68,11 @@ class SynthesisPage extends Component {
         return (
             <div className={this.getPageClassName()}>
                 <div className="container">
-                    {this.renderTitleBar()}
+                    <PageHeadline
+                        backText="Back to synthesis"
+                        {...this.props}
+                        {...this.state}
+                    />
                     <div className="synthesis-photo">Synthesis-photo</div>
                     <Switch>
                         <Route
@@ -161,10 +93,16 @@ class SynthesisPage extends Component {
                             path={`${routerBasename}/gallery`}
                             component={connectList(GalleryPage, "galleryList")}
                         />
-                        <Route
-                            path={`${routerBasename}/`}
-                            render={() => <SynthesisDashboard model={model} />}
-                        />
+                        <Route path={`${routerBasename}/`}>
+                            <>
+                                <SynthesisCompounds model={model} />
+                                <ShortList
+                                    items={model.gallery}
+                                    path={`${routerBasename}/gallery`}
+                                    newBtn
+                                />
+                            </>
+                        </Route>
                     </Switch>
                 </div>
             </div>

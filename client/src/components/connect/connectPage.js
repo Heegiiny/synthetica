@@ -33,7 +33,7 @@ export default (WrappedComponent, stateContainer = "modelPage") => {
         }
 
         componentWillUnmount() {
-            // this.props.resetPage();
+            //this.props.resetPage();
         }
 
         render() {

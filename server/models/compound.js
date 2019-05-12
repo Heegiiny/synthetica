@@ -11,7 +11,7 @@ const schema = new Schema(
         text: String,
         formula: {
             isImage: { type: Boolean, required: true, default: false },
-            text: { type: String /*required: true*/ }
+            text: { type: String, required: true }
         }
     },
     {

@@ -4,23 +4,13 @@
  * При ошибке валидации возвращает код 422 и описание полей с ошибками.
  */
 
+const flatValidationError = require("../utils/flatValidationError");
+
 module.exports = (err, req, res, next) => {
     switch (err.name) {
         // Ошибки валидации
         case "ValidationError":
-            Object.keys(err.errors).forEach(key => {
-                if (
-                    typeof err.errors[key] === "object" &&
-                    err.errors[key].message
-                ) {
-                    err.errors[key] = err.errors[key].message;
-                }
-                const keySplit = key.split(".");
-                if (keySplit.length > 1) {
-                    err.errors[keySplit[keySplit.length - 1]] = err.errors[key];
-                    delete err.errors[key];
-                }
-            });
+            err = flatValidationError(err);
             res.status(422).json(err);
             break;
 

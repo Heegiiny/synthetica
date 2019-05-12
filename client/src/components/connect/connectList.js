@@ -65,7 +65,13 @@ export default (
                 );
             }
 
-            return <WrappedComponent {...this.props} path={this.path} />;
+            return (
+                <WrappedComponent
+                    {...this.props}
+                    path={this.path}
+                    more={pagination === "more"}
+                />
+            );
         }
     }
 

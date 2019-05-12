@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from "react";
 import { Button } from "reactstrap";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { matchPath } from "react-router";
 
 import CompoundDashboard from "./CompoundDashboard";
 
-import ShortGallery from "../gallery/ShortGallery";
 import GalleryPage from "../gallery/GalleryPage";
 import GalleryPostForm from "../gallery/GalleryPostForm";
 import GalleryPostPage from "../gallery/GalleryPostPage";
@@ -12,48 +12,49 @@ import GalleryPostPage from "../gallery/GalleryPostPage";
 import connectForm from "../connect/connectForm";
 import connectPage from "../connect/connectPage";
 import connectList from "../connect/connectList";
+import ShortList from "../list/ShortList";
+import PageHeadline from "../common/PageHeadline";
 
 class CompoundPage extends Component {
-    renderControls = () => {
-        if (!this.props.match.isExact) {
-            return null;
-        }
+    constructor(props) {
+        super(props);
 
-        const editBtn = (
-            <Link to={this.props.match.url + "/edit"}>
-                <Button size="sm" outline color="secondary" className="ml-2">
-                    <i className="fa fa-edit" />
-                    Edit
-                </Button>
-            </Link>
-        );
+        this.state = {
+            currentSubPath: "",
+            routerBasename: ""
+        };
+    }
 
-        const removeBtn = (
-            <Button size="sm" outline color="danger" className="ml-2">
-                <i className="fa fa-trash-alt" />
-                Delete
-            </Button>
-        );
-
-        return (
-            <>
-                {editBtn}
-                {removeBtn}
-            </>
-        );
-    };
-    /*
-    shouldComponentUpdate(nextProps, nextState) {
-        if (this.props.location.pathname !== nextProps.location.pathname) {
-            return true;
-        }
-    }*/
+    componentDidMount() {
+        this.updateRouterState(this.props);
+    }
 
     componentWillReceiveProps(nextProps) {
+        console.log(nextProps);
         if (this.props.location.pathname !== nextProps.location.pathname) {
-            this.forceUpdate();
+            this.updateRouterState(nextProps);
         }
     }
+
+    updateRouterState = props => {
+        const routerBasename = props.match.url;
+        let currentSubPath = "";
+        if (props.match.isExact) {
+            currentSubPath = "main";
+        }
+
+        const isGalleryPage = matchPath(props.location.pathname, {
+            path: `${routerBasename}/gallery/:id`
+        });
+        if (isGalleryPage) {
+            currentSubPath = "gallery";
+        }
+
+        this.setState({
+            currentSubPath: currentSubPath,
+            routerBasename: routerBasename
+        });
+    };
 
     render() {
         const { title, gallery } = this.props.model;
@@ -65,54 +66,50 @@ class CompoundPage extends Component {
 
         return (
             <div className="compound-page mt-3">
-                <div className="container-fluid">
-                    <div className="row mb-1">
-                        <div className="col-lg-4">
-                            <h1>{title}</h1>
-                        </div>
-                        <div className="col-lg-8 text-right">
-                            {this.renderControls()}
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-lg-4">
-                            <div className="compound-photo">compound-photo</div>
-                            <ShortGallery items={gallery} />
-                        </div>
-                        <div className="col-lg-8">
-                            <Switch>
-                                <Route
-                                    path={`${routerBasename}/gallery/new`}
-                                    component={connectForm(
-                                        GalleryPostForm,
-                                        "galleryPost"
-                                    )}
-                                />
-                                <Route
-                                    path={`${routerBasename}/gallery/:id`}
-                                    component={connectPage(
-                                        GalleryPostPage,
-                                        "galleryPost"
-                                    )}
-                                />
-                                <Route
-                                    path={`${routerBasename}/gallery`}
-                                    component={connectList(
-                                        GalleryPage,
-                                        "galleryList"
-                                    )}
-                                />
-                                <Route
-                                    path={`${routerBasename}/`}
-                                    render={() => (
-                                        <CompoundDashboard
-                                            model={this.props.model}
-                                        />
-                                    )}
-                                />
-                            </Switch>
-                        </div>
-                    </div>
+                <div className="container">
+                    <PageHeadline
+                        backText="Back to compound"
+                        {...this.props}
+                        {...this.state}
+                    />
+                    {/*<div className="row">
+                        <div className="col-lg-4">*/}
+                    <div className="compound-photo">compound-photo</div>
+                    <ShortList
+                        items={gallery}
+                        path={`${routerBasename}/gallery`}
+                        newBtn
+                    />
+                    {/*</div>
+                        <div className="col-lg-8">*/}
+                    <Switch>
+                        <Route
+                            path={`${routerBasename}/gallery/new`}
+                            component={connectForm(
+                                GalleryPostForm,
+                                "galleryPost"
+                            )}
+                        />
+                        <Route
+                            path={`${routerBasename}/gallery/:id`}
+                            component={connectPage(
+                                GalleryPostPage,
+                                "galleryPost"
+                            )}
+                        />
+                        <Route
+                            path={`${routerBasename}/gallery`}
+                            component={connectList(GalleryPage, "galleryList")}
+                        />
+                        <Route
+                            path={`${routerBasename}/`}
+                            render={() => (
+                                <CompoundDashboard model={this.props.model} />
+                            )}
+                        />
+                    </Switch>
+                    {/*</div>
+                    </div>*/}
                 </div>
             </div>
         );

@@ -1,7 +1,17 @@
 export default (updateFunction, prefix) => {
     class HandleChangeHelper {
         update = (name, value) => {
-            const prefixedName = prefix ? prefix + "." + name : name;
+            name = name.toString ? name.toString() : name;
+            let prefixedName;
+            if (prefix && name) {
+                prefixedName = prefix + "." + name;
+            } else if (prefix) {
+                prefixedName = prefix;
+            } else if (name) {
+                prefixedName = name;
+            } else {
+                throw new Error("Updating model requires field name.");
+            }
 
             updateFunction(prefixedName, value);
         };

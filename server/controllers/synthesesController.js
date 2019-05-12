@@ -47,6 +47,11 @@ router.get("/:id(\\d+)/gallery/:gallery_id(\\d+)", function(req, res, next) {
 });
 
 router.post("/:id(\\d+)/gallery", function(req, res, next) {
+    if (!req.user) {
+        return res.status(403).json({
+            errors: "You must log in"
+        });
+    }
     const blocks = req.body.blocks;
     if (!blocks) {
         res.status(400).json({
@@ -56,7 +61,8 @@ router.post("/:id(\\d+)/gallery", function(req, res, next) {
 
     SynthesisPost.create({
         ...req.body,
-        synthesis: req.activeDoc._id
+        synthesis: req.activeDoc._id,
+        user: req.user._id
     })
         .then(post => res.json(post))
         .catch(err => next(err));

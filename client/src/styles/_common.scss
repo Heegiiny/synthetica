@@ -13,6 +13,7 @@ img {
 
 $border-std: 1px solid #e5e9f2;
 $shadow-std: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
+$error-red: #dc3545;
 
 @mixin border-block($padding: 5px) {
     border: $border-std;

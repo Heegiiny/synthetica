@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Nav, NavItem } from "reactstrap";
+import React, { Component, useState } from "react";
+import { Collapse, NavbarToggler, Nav, NavItem } from "reactstrap";
 import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import Dropdown, {
@@ -17,7 +17,7 @@ function TopMenuLink({ to, children }) {
     );
 }
 
-function CenterNav({ user }) {
+function CenterNav({ auth }) {
     return (
         <Nav>
             <Dropdown>
@@ -26,7 +26,11 @@ function CenterNav({ user }) {
                 </DropdownTrigger>
                 <DropdownContent className="dropdown-menu">
                     <TopMenuLink to="/compounds">Compounds List</TopMenuLink>
-                    <TopMenuLink to="/compounds/new">New Compound</TopMenuLink>
+                    {auth.isAuthenticated && (
+                        <TopMenuLink to="/compounds/new">
+                            New Compound
+                        </TopMenuLink>
+                    )}
                 </DropdownContent>
             </Dropdown>
             <Dropdown>
@@ -35,7 +39,11 @@ function CenterNav({ user }) {
                 </DropdownTrigger>
                 <DropdownContent className="dropdown-menu">
                     <TopMenuLink to="/syntheses">Syntheses List</TopMenuLink>
-                    <TopMenuLink to="/syntheses/new">New Synthesis</TopMenuLink>
+                    {auth.isAuthenticated && (
+                        <TopMenuLink to="/syntheses/new">
+                            New Synthesis
+                        </TopMenuLink>
+                    )}
                 </DropdownContent>
             </Dropdown>
         </Nav>
@@ -71,7 +79,18 @@ RightNav = connect(
     {}
 )(RightNav);
 
+const mapStateToCenterNavProps = state => ({
+    auth: state.auth
+});
+
+CenterNav = connect(
+    mapStateToCenterNavProps,
+    {}
+)(CenterNav);
+
 function Header() {
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
         <header className={"app-header"}>
             <nav
@@ -83,8 +102,11 @@ function Header() {
                     <Link to="/" className="navbar-brand">
                         Synthetica
                     </Link>
-                    <CenterNav />
-                    <RightNav />
+                    <NavbarToggler onClick={() => setIsOpen(!isOpen)} />
+                    <Collapse isOpen={isOpen} navbar>
+                        <CenterNav />
+                        <RightNav />
+                    </Collapse>
                 </div>
             </nav>
         </header>

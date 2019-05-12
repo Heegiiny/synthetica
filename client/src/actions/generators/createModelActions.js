@@ -1,16 +1,17 @@
 import axios from "axios";
+import store from "../../store";
 
 export default stateContainer => {
-    function getContainerState(getState) {
-        return getState()[stateContainer];
+    function getContainerState() {
+        return store.getState()[stateContainer];
     }
 
     class modelActions {
-        updatePage = () => (dispatch, getState) => {
-            const { path, id, componentName } = getContainerState(getState);
+        updatePage = () => dispatch => {
+            const { path, id, componentName } = getContainerState();
 
             if (!id) {
-                return;
+                return this.resetPage();
             }
 
             dispatch(this.setPageLoading());
@@ -19,30 +20,24 @@ export default stateContainer => {
                 .get(`/api/${path}/${id}`)
                 .then(res => {
                     console.log(res);
+
                     dispatch({
                         type: `GET_${componentName}_MODEL`,
                         payload: res.data
                     });
                 })
-                .catch(err => {});
+                .catch(err => {
+                    console.log(err);
+
+                    dispatch({
+                        type: `SET_${componentName}_ERRORS`,
+                        payload: err.response
+                    });
+                });
         };
 
-        updateStateModel = (path, value) => (dispatch, getState) => {
-            const { componentName } = getContainerState(getState);
-
-            dispatch({
-                type: `UPDATE_${componentName}_MODEL`,
-                payload: {
-                    path: path,
-                    value: value
-                }
-            });
-        };
-
-        savePage = (model, history) => (dispatch, getState) => {
-            //dispatch(setPageLoading());
-
-            let { path, id, componentName } = getContainerState(getState);
+        savePage = callback => dispatch => {
+            let { path, id, componentName, model } = getContainerState();
 
             if (!id) {
                 id = "";
@@ -51,34 +46,81 @@ export default stateContainer => {
             axios
                 .post(`/api/${path}/${id}`, model)
                 .then(res => {
-                    history.push(`/${path}/${res.data.id}`);
+                    console.log(res);
+
+                    callback(res.data);
                 })
-                .catch(err => {});
+                .catch(err => {
+                    console.log(err);
+
+                    dispatch({
+                        type: `SET_${componentName}_ERRORS`,
+                        payload: err.response
+                    });
+                });
         };
 
-        setActivePath = (path, id) => (dispatch, getState) => {
-            const { componentName } = getContainerState(getState);
-            dispatch({
+        deletePage = callback => dispatch => {
+            let { path, id, componentName } = getContainerState();
+
+            if (!id) {
+                console.log("No id in deletePage()");
+
+                return;
+            }
+
+            axios
+                .delete(`/api/${path}/${id}`)
+                .then(res => {
+                    console.log(res);
+
+                    callback();
+                })
+                .catch(err => {
+                    console.log(err);
+
+                    dispatch({
+                        type: `SET_${componentName}_ERRORS`,
+                        payload: err.response
+                    });
+                });
+        };
+
+        updateStateModel = (path, value) => {
+            const { componentName } = getContainerState();
+
+            return {
+                type: `UPDATE_${componentName}_MODEL`,
+                payload: {
+                    path: path,
+                    value: value
+                }
+            };
+        };
+
+        setActivePath = (path, id) => {
+            const { componentName } = getContainerState();
+            return {
                 type: `SET_${componentName}_PATH`,
                 payload: {
                     path: path,
                     id: id
                 }
-            });
+            };
         };
 
-        setPageLoading = () => (dispatch, getState) => {
-            const { path, id, componentName } = getContainerState(getState);
-            dispatch({
+        setPageLoading = () => {
+            const { componentName } = getContainerState();
+            return {
                 type: `${componentName}_LOADING`
-            });
+            };
         };
 
-        resetPage = () => (dispatch, getState) => {
-            const { path, id, componentName } = getContainerState(getState);
-            dispatch({
+        resetPage = () => {
+            const { componentName } = getContainerState();
+            return {
                 type: `RESET_${componentName}`
-            });
+            };
         };
     }
 

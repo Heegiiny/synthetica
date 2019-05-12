@@ -7,6 +7,7 @@ const pageSchemaPlugin = require("../plugins/pageSchemaPlugin");
 const User = require("../users/user");
 const Compound = require("../compound");
 const Synthesis = require("../synthesis");
+const isEmpty = require("../../validation/is-empty");
 
 const postBlockSchema = new Schema({
     video: String,
@@ -21,7 +22,7 @@ const schema = new Schema(
     {
         user: { type: ObjectId, ref: "User" /*required: true*/ },
         compound: { type: ObjectId, ref: "Compound", required: true },
-        title: String,
+        title: { type: String, required: true },
         otherCompounds: [{ type: ObjectId, ref: "Compound" }],
         blocks: [postBlockSchema],
         isPreview: { type: Boolean, default: false }
@@ -30,6 +31,29 @@ const schema = new Schema(
         toJSON: { virtuals: true }
     }
 );
+
+schema.method("clearEmptyBlocks", function() {
+    this.blocks = this.blocks.filter(
+        block =>
+            !isEmpty(block.video) ||
+            !isEmpty(block.image) ||
+            !isEmpty(block.text)
+    );
+});
+
+schema.method("isEmpty", function() {
+    this.clearEmptyBlocks();
+
+    return !(this.blocks.length || (this.title && this.title.length));
+});
+
+schema.pre("validate", function() {
+    this.clearEmptyBlocks();
+
+    if (!this.blocks.length) {
+        this.invalidate("blocks", "Post can't be empty");
+    }
+});
 
 schema.virtual("preview").get(function() {
     function getVideoPreview(video) {
@@ -46,6 +70,10 @@ schema.virtual("preview").get(function() {
 
     function getImagePreview(image) {
         return "/media/" + image;
+    }
+
+    if (!this.blocks) {
+        return null;
     }
 
     const filteredBlocks = this.blocks.filter(
@@ -68,11 +96,17 @@ schema.virtual("preview").get(function() {
 });
 
 schema.virtual("isVideo").get(function() {
+    if (!this.blocks) {
+        return false;
+    }
     const videoBlocks = this.blocks.filter(block => !!block.video);
     return videoBlocks.length > 0;
 });
 
 schema.virtual("isGallery").get(function() {
+    if (!this.blocks) {
+        return false;
+    }
     const imageBlocks = this.blocks.filter(block => !!block.image);
     return imageBlocks.length > 1;
 });

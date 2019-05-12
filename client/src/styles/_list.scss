@@ -13,6 +13,23 @@
     .flex-column > .list-item {
         max-width: 100%;
     }
+    margin-bottom: 2em;
+    .scrollbar-container {
+        .row {
+            flex-wrap: nowrap;
+            margin: 0;
+        }
+        .ps--active-x {
+            padding-bottom: 20px;
+        }
+        .list-item {
+            width: 250px;
+            min-width: 250px;
+            flex: auto;
+        }
+    }
+}
+.short-list {
 }
 
 .short-list-title {

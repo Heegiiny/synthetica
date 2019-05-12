@@ -22,7 +22,17 @@ const schema = new Schema(
         synthesis: { type: ObjectId, ref: "Synthesis", required: true },
         title: String,
         blocks: [postBlockSchema],
-        isPreview: { type: Boolean, default: false }
+        isPreview: { type: Boolean, default: false },
+        compoundsAmount: [
+            {
+                compound: {
+                    type: ObjectId,
+                    required: true,
+                    ref: "Compound"
+                },
+                amount: String
+            }
+        ]
     },
     {
         toJSON: { virtuals: true }

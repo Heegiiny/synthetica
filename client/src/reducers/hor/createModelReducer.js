@@ -1,16 +1,37 @@
 import objectPath from "object-path";
 
+function unsetFieldError(errors, path) {
+    const clonedErrors = JSON.parse(JSON.stringify(errors));
+    objectPath.del(clonedErrors, "data.errors." + path);
+    return clonedErrors;
+}
+
 export default function(componentName) {
     const initialState = {
         path: "",
         id: 0,
         loading: false,
         model: {},
+        errors: {},
         componentName: componentName
     };
 
     return function(state = initialState, action) {
         switch (action.type) {
+            case `SET_${componentName}_ERRORS`:
+                return {
+                    ...state,
+                    errors: action.payload
+                };
+
+            case `RESET_${componentName}_ERRORS`:
+                return {
+                    ...state,
+                    errors: action.payload
+                        ? unsetFieldError(state.errors, action.payload)
+                        : {}
+                };
+
             case `SET_${componentName}_PATH`:
                 if (
                     action.payload.path === state.path &&
@@ -37,7 +58,8 @@ export default function(componentName) {
                 objectPath.set(clonedModel, path, value);
                 return {
                     ...state,
-                    model: clonedModel
+                    model: clonedModel,
+                    errors: unsetFieldError(state.errors, path)
                 };
 
             case `GET_${componentName}_MODEL`:

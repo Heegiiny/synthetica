@@ -12,7 +12,7 @@ function ErrorAlert({ errors }) {
         return null;
     }
 
-    let alertText = "Ошибка";
+    let alertText = "Error";
     let errorData = "";
 
     // Получаем сообщение об ошибке из ответа сервера
@@ -29,7 +29,7 @@ function ErrorAlert({ errors }) {
         case 422:
             alertText = (
                 <>
-                    <p>Проверьте правильность заполнения формы</p>
+                    <p>Please fill the form correctly</p>
                 </>
             );
             break;
@@ -37,7 +37,7 @@ function ErrorAlert({ errors }) {
             alertText = (
                 <>
                     <p>
-                        Ошибка. {errors.status} {errors.statusText}
+                        Error. {errors.status} {errors.statusText}
                     </p>
                     <p>{errorData}</p>
                 </>

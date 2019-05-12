@@ -38,7 +38,7 @@ module.exports = function pageSchemaPlugin(schema, options) {
         validate({
             validator: "isLength",
             arguments: [3, 250],
-            message: "Название должно быть от {ARGS[0]} до {ARGS[1]} символов."
+            message: "The title must be {ARGS[0]} to {ARGS[1]} symbols."
         })
     ];
 
@@ -46,8 +46,8 @@ module.exports = function pageSchemaPlugin(schema, options) {
     schema.add({
         title: {
             type: String,
-            required: "Название не может быть пустым",
-            unique: "Такое название уже используется",
+            required: "The title can't be empty",
+            unique: "This title is already used",
             validate: titleValidator
         }
     });

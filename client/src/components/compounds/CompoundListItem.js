@@ -19,9 +19,9 @@ class CompoundListItem extends Component {
     renderPhoto = () => {
         const { formula, title } = this.props.model;
 
-        if (formula.isImage && formula.text && formula.text.length) {
+        if (formula && formula.isImage && formula.text && formula.text.length) {
             return <img src={`/media/${formula.text}`} alt={title} />;
-        } else if (formula.text && formula.text.length) {
+        } else if (formula && formula.text && formula.text.length) {
             return (
                 <div
                     className="compound-formula-text"

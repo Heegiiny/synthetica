@@ -35,6 +35,16 @@
     .form-control {
         border: none;
     }
+    &.is-invalid {
+        border-color: $error-red;
+        & + .invalid-feedback {
+            display: block;
+        }
+    }
+}
+
+.image-field {
+    padding: 10px;
 }
 
 .formula-field-radio-row {

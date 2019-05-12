@@ -18,13 +18,18 @@ const schema = new Schema(
         password: { type: String, required: true },
         email: { type: String, unique: true, required: true },
         avatar: { type: String },
+        text: String,
         socials: {
             youtube: { type: String },
             twitter: { type: String },
             facebook: { type: String }
         }
     },
-    { toJSON: { virtuals: true }, discriminatorKey: "group" }
+    {
+        toJSON: { virtuals: true },
+        discriminatorKey: "group",
+        noVirtualId: true
+    }
 );
 
 // Добавляем поля для страницы сайта

@@ -3,6 +3,16 @@
 
 .gallery-title {
     font-weight: 300;
+    a {
+        color: inherit;
+        transition: color 200ms ease;
+        &:hover,
+        &:focus,
+        &:active {
+            text-decoration: none;
+            color: lighten($color: #000000, $amount: 40);
+        }
+    }
 }
 
 .gallery-post-video {

@@ -7,7 +7,7 @@ function CompoundRelated({ model }) {
     return (
         <div className="compound-related">
             <ShortList
-                path="syntheses"
+                path="compounds"
                 title="Gallery posts mention the compound"
                 items={relatedPosts}
             />

@@ -7,7 +7,7 @@ class GalleryPage extends Component {
         return (
             <div className="gallery-page">
                 <div className="gallery-page-list">
-                    <ListPage items={this.props.items} path={this.props.path} />
+                    <ListPage {...this.props} />
                 </div>
             </div>
         );

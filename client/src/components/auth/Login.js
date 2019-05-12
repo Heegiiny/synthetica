@@ -1,6 +1,4 @@
-/**
- * Страница входа
- */
+/** Sign in form */
 
 import React, { Component, Fragment } from "react";
 import {
@@ -38,10 +36,6 @@ class Login extends Component {
         // Если вход уже выполнен перенаправляем на главную
         if (nextProps.auth.isAuthenticated) {
             this.props.history.push("/");
-        }
-        // Заносим ошибки в state
-        if (nextProps.errors) {
-            this.setState({ errors: nextProps.errors });
         }
     }
 

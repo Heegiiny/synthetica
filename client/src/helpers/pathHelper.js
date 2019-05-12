@@ -12,3 +12,5 @@ function processPath(routerPath) {
 }
 
 export default processPath;
+
+export const trimPath = path => path.replace(/^\/|\/$/g, "");

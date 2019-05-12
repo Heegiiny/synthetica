@@ -3,16 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { withRouter } from "react-router";
-import {
-    Button,
-    Form,
-    FormGroup,
-    Label,
-    Input,
-    FormText,
-    FormFeedback,
-    Badge
-} from "reactstrap";
+import { Button } from "reactstrap";
 
 import FormContainer from "../forms/FormContainer";
 import handleChangeHelper from "../../helpers/handleChangeHelper";
@@ -44,10 +35,6 @@ export default (WrappedComponent, stateContainer = "modelPage") => {
             this.props.resetPage();
 
             this.props.setActivePath(this.path, this.activeId);
-
-            this.state = {
-                model: props.model
-            };
             // Загружаем надписи
             //this.captions = captions[this.path].sidebar;
             this.updateState = handleChangeHelper(this.props.updateStateModel);
@@ -56,7 +43,9 @@ export default (WrappedComponent, stateContainer = "modelPage") => {
 
         handleSubmit(event) {
             event.preventDefault();
-            this.props.savePage(this.state.model, this.props.history);
+            this.props.savePage(doc => {
+                this.props.history.push(`/${this.path}/${doc.id}`);
+            });
         }
 
         componentDidMount() {
@@ -67,23 +56,18 @@ export default (WrappedComponent, stateContainer = "modelPage") => {
             //this.props.resetPage();
         }
 
-        componentWillReceiveProps(newProps) {
-            const model = newProps.model ? newProps.model : {};
-
-            this.setState({
-                model: model
-            });
-        }
-
         render() {
+            const { errors, model } = this.props;
             return (
                 <FormContainer onSubmit={this.handleSubmit}>
                     <WrappedComponent
                         {...this.props}
                         onInputChange={this.updateState.onChange}
                         updateStateModel={this.updateState.update}
-                        model={this.props.model}
+                        model={model}
+                        errors={errors}
                     />
+
                     <Button outline color="success">
                         Save
                     </Button>

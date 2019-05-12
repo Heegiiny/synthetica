@@ -8,6 +8,8 @@ import CompoundDiscussion from "./CompoundDiscussion";
 function CompoundDashboard({ model }) {
     const { title, text, posts } = model;
 
+    return <CompoundRelated model={model} />;
+
     return (
         <div className="row">
             <div className="col-lg-6">

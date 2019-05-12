@@ -3,7 +3,7 @@
  */
 
 let paginatedList = function(Model, query, res, next, select) {
-    if (!select) select = "id title";
+    if (select === undefined) select = "id title";
 
     console.log("GET paginated list for " + Model.modelName);
 
